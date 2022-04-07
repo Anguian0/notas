@@ -20,6 +20,15 @@ function App() {
     });
   };
 
+  const handleResetChange = () => {
+    setInputState({
+      ...inputState,
+    titulo: "", 
+    fecha: "", 
+    nota: ""
+  });
+  };
+
   return (
     <div className="App">
       <div className="container-sm mx-auto card m-4 p-3 bg-light shadow">
@@ -50,6 +59,10 @@ function App() {
           onChange={handleInputChange}
           value={inputState.nota}
         />
+        <br />
+        <button onClick={handleResetChange} className="btn btn-dark" type="button">
+          Limpiar
+        </button>
       </div>
 
       <nav class="container navbar navbar-expand-lg navbar-dark mt-2 mb-2">
