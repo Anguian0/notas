@@ -7,12 +7,10 @@ function App() {
     nota: "",
   });
 
+  const initialState = JSON.parse(localStorage.getItem("notas")) || [];
+  const [notas, setNotas] = useState(initialState);
+
   const handleInputChange = (event) => {
-    // setInputState({
-    //   titulo: event.target.value,
-    //   fecha: "",
-    //   nota: "",
-    // });
     setInputState({
       ...inputState,
       [event.target.name]: event.target.value,
@@ -29,22 +27,67 @@ function App() {
   };
 
   const handleClickGuardar = () => {
-    let arregloNotas = JSON.parse (localStorage.getItem("notas")) || [];
-    arregloNotas.push(inputState);
-    localStorage.setItem("notas", JSON.stringify(arregloNotas));
+    setNotas([...notas, inputState])
+    localStorage.setItem("notas", JSON.stringify(notas));
     handleResetChange();
+  };
+
+  const handleBorrarNota = (index) => {
+    const nuevoArreglo = []
+
+    notas.forEach((nota, i) => {
+      if (index !== i) {
+        nuevoArreglo.push(nota);
+      }
+    });
+    localStorage.setItem("notas", JSON.stringify(nuevoArreglo));
+    setNotas([...nuevoArreglo]);
   };
 
   return (
     <div className="App container">
       <div className="row bg-light p-3 rounded m-3">
         <div className="col p-4">
-          <h3 className="text-center">Lista</h3>
+          <h3 className="text-center">
+            <i class="bi bi-card-list"></i> Lista
+          </h3>
+          {notas.length === 0 ? (
+            "Al momento no tienes notas guardadas. Puedes crear una en el formulario contiguo."
+          ) : (
+            <ol>
+              {notas.map((item, index) => {
+                return (
+                  <li key={index}>
+                    {item.titulo} ({item.fecha})
+                    <i
+                      class="bi bi-x-circle mx-2"
+                      onClick={() => handleBorrarNota(index)}
+                      style={{ color: "red", fontSize: "1.1rem", cursor: "pointer"}}
+                    ></i>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+
+          {/* {arregloNotas.length !== 0 && (
+            <ol>
+              {arregloNotas.map((item) => {
+                return (
+                  <li>
+                    {item.titulo} ({item.fecha})
+                  </li>
+                );
+              })}
+            </ol>
+          )} */}
         </div>
         <div className="col mx-auto bg-light p-4">
-          <h3 className="text-center">Notas</h3>
+          <h3 className="text-center">
+            <i class="bi bi-card-text"></i> Notas
+          </h3>
           <label style={{ width: "100%" }} htmlFor="titulo">
-            Input de Titulo
+            <i class="bi bi-pencil-square mx-2"></i>Título
             <input
               className="m-2"
               type="text"
@@ -58,7 +101,7 @@ function App() {
 
           <br />
           <label style={{ width: "100%" }} htmlFor="fecha">
-            Input de Fecha
+            <i class="bi bi-calendar-week mx-2"></i>Fecha
             <input
               className="m-2"
               type="date"
@@ -72,10 +115,9 @@ function App() {
 
           <br />
           <label style={{ width: "100%" }} htmlFor="nota">
-            Input de Nota
-            <input
+            <i class="bi bi-body-text mx-2"></i>Nota
+            <textarea
               className="m-2"
-              type="text"
               id="nota"
               name="nota"
               onChange={handleInputChange}
@@ -89,10 +131,10 @@ function App() {
               <div className="row mx-1">
                 <button
                   onClick={handleResetChange}
-                  className="btn btn-outline-dark"
+                  className="btn btn-outline-dark shadow"
                   type="button"
                 >
-                  Limpiar
+                  <i class="bi bi-x-circle"></i> Limpiar
                 </button>
               </div>
             </div>
@@ -100,10 +142,10 @@ function App() {
               <div className="row mx-1">
                 <button
                   onClick={handleClickGuardar}
-                  className="btn btn-outline-primary"
+                  className="btn btn-outline-primary shadow"
                   type="button"
                 >
-                  Guardar
+                  <i class="bi bi-check-circle"></i> Guardar
                 </button>
               </div>
             </div>
@@ -111,7 +153,7 @@ function App() {
         </div>
       </div>
 
-      <nav class="container navbar navbar-expand-lg navbar-dark mt-2 mb-2">
+      {/* <nav class="container navbar navbar-expand-lg navbar-dark mt-2 mb-2">
         <div class="container-fluid">
           <img
             height="40"
@@ -229,7 +271,7 @@ function App() {
 
       <br />
 
-      <section class="card m-4 pb-3 bg-light shadow-lg">
+      <section class="m-4 pb-3 shadow-lg">
         <h1 class="text-center pt-4 mt-3">TOP ANIME</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4 m-3">
           <div class="col">
@@ -544,7 +586,7 @@ function App() {
           ></iframe>
         </div>
       </section>
-      <br />
+      <br /> */}
     </div>
   );
 }
