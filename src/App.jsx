@@ -33,7 +33,7 @@ function App() {
 
   const handleClickGuardar = () => {
     setNotas([...notas, inputState]);
-    localStorage.setItem("notas", JSON.stringify(notas));
+    localStorage.setItem("notas", JSON.stringify([...notas, inputState]));
     handleResetChange();
   };
 
@@ -49,6 +49,10 @@ function App() {
     setNotas([...nuevoArreglo]);
   };
 
+  const handleClickNota = (index) => {
+    setInputState({...notas[index]});
+  };
+
   return (
     <div className="App container">
       <div className="row bg-light p-3 rounded m-3">
@@ -62,7 +66,7 @@ function App() {
             <ol>
               {notas.map((item, index) => {
                 return (
-                  <li key={index}>
+                  <li style={{cursor: "pointer"}} key={index} onClick={() => handleClickNota(index)}>
                     {item.titulo} ({item.fecha})
                     <i
                       class="bi bi-x-circle mx-2"
